@@ -1,6 +1,7 @@
 .App {
   font-family: arial;
-  padding: 10px;
+  padding: 20px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .App-logo {
@@ -22,4 +23,9 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
 }

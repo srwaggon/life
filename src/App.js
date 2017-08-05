@@ -19,8 +19,17 @@ class App extends Component {
   }
 
   fetchPriorities = () => {
-    database.ref('/priorities').on('value', snapshot => {
-      this.updatePriorities(snapshot.val() || []);
+    database.ref('/priorities')
+    .orderByChild('votes')
+    .on('value', snapshot => {
+      let priorities = [];
+
+      snapshot.forEach(priority => {
+        let foo = {id: priority.key, priority: priority.val()};
+        priorities = [foo].concat(priorities);
+      });
+
+      this.updatePriorities(priorities || []);
     });
   }
 
@@ -39,21 +48,27 @@ class App extends Component {
   }
 
   addPriority = (text) => {
-    let newId = this.state.priorities.length;
-    database.ref('/priorities').push().set(text);
+    database.ref('/priorities').push().set({ text, votes: 1 });
   }
 
-  deletePriority = (id) => {
+  deletePriority = id => {
     return () => {
       database.ref('/priorities/' + id).set(null);
     }
   }
 
+  upvote = (id, votes) => {
+    return () => {
+      database.ref('/priorities/' + id + '/votes/').set(votes + 1);
+    }
+  }
+
   getPrioritiesList() {
-    return Object.keys(this.state.priorities).map((id) => {
+    return this.state.priorities.map(({id, priority}) => {
+      let votes = priority.votes;
       return (
         <li key={`li-${id}`}>
-          {this.state.priorities[id]} <span onClick={this.deletePriority(id)}>[x]</span>
+           <button onClick={this.upvote(id, votes)}>upvote</button> ({votes}) {priority.text}
         </li>
       );
     });
@@ -62,9 +77,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Let My People Go</h1>
+        <h1>What's important to you?</h1>
         <form onSubmit={this.onSubmitPriority}>
-          <input type="text" value={this.state.input} onChange={this.onUpdateInput} placeholder="Priority"/>
+          <input type="text" required value={this.state.input} onChange={this.onUpdateInput} placeholder="Life Priority"/>
           <input type="submit" value="add" />
         </form>
         <ul>
