@@ -1,5 +1,11 @@
-build:
+start:
+	yarn start
+
+build: clean
 	yarn build
 
-deploy:
+deploy: build
 	firebase deploy --only hosting
+
+clean:
+	rm -rf build/

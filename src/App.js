@@ -22,7 +22,7 @@ class App extends Component {
   fetchTitle = () => {
     database.ref('/title')
       .once('value').then(snapshot => {
-        this.state.title = snapshot.val()
+        this.setState({title: snapshot.val()});
       });
   }
 
