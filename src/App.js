@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import {database} from './Firebase';
@@ -10,12 +9,21 @@ class App extends Component {
     super(props);
     this.state = {
       input: '',
-      priorities: []
+      priorities: [],
+      title: '',
     };
   }
 
   componentDidMount = () => {
+    this.fetchTitle();
     this.fetchPriorities();
+  }
+
+  fetchTitle = () => {
+    database.ref('/title')
+      .once('value').then(snapshot => {
+        this.state.title = snapshot.val()
+      });
   }
 
   fetchPriorities = () => {
@@ -77,7 +85,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>What's important to you?</h1>
+        <h1>{this.state.title}</h1>
         <form onSubmit={this.onSubmitPriority}>
           <input type="text" required value={this.state.input} onChange={this.onUpdateInput} placeholder="Life Priority"/>
           <input type="submit" value="add" />
