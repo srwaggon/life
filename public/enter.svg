@@ -1,0 +1,12 @@
+<svg width="108" height="90" viewBox="0 0 108 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Arrow</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="matrix(3 0 0 3 816 318)">
+<g id="Arrow">
+<use xlink:href="#path0_stroke" transform="translate(-271.5 -91)" fill="#247BA0"/>
+</g>
+</g>
+<defs>
+<path id="path0_stroke" d="M 34.9142 1.41421C 35.6953 0.633165 35.6953 -0.633165 34.9142 -1.41421L 22.1863 -14.1421C 21.4052 -14.9232 20.1389 -14.9232 19.3579 -14.1421C 18.5768 -13.3611 18.5768 -12.0948 19.3579 -11.3137L 30.6716 0L 19.3579 11.3137C 18.5768 12.0948 18.5768 13.3611 19.3579 14.1421C 20.1389 14.9232 21.4052 14.9232 22.1863 14.1421L 34.9142 1.41421ZM 0 2L 33.5 2L 33.5 -2L 0 -2L 0 2Z"/>
+</defs>
+</svg>

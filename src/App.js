@@ -46,7 +46,7 @@ class App extends Component {
   }
 
   onUpdateInput = (event) => {
-      this.setState({input: event.target.value});
+    this.setState({input: event.target.value});
   }
 
   onSubmitPriority = event => {
@@ -65,35 +65,59 @@ class App extends Component {
     }
   }
 
-  upvote = (id, votes) => {
-    return () => {
-      database.ref('/priorities/' + id + '/votes/').set(votes + 1);
-    }
-  }
+  handleUpvote = (data) => {
+    const id = data.id;
+    const priority = data.priority;
 
-  getPrioritiesList() {
-    return this.state.priorities.map(({id, priority}) => {
-      let votes = priority.votes;
-      return (
-        <li key={`li-${id}`}>
-           <button onClick={this.upvote(id, votes)}>upvote</button> ({votes}) {priority.text}
-        </li>
-      );
-    });
+    database
+      .ref(`/priorities/${id}`)
+      .update({ votes: priority.votes + 1 });
   }
 
   render() {
+    const priorities = this.state.priorities.map(priority => {
+      return (
+        <Priority priority={priority} onUpvote={this.handleUpvote} key={priority.id} />
+      );
+    });
+
     return (
-      <div className="App">
-        <h1>{this.state.title}</h1>
-        <form onSubmit={this.onSubmitPriority}>
-          <input type="text" required value={this.state.input} onChange={this.onUpdateInput} placeholder="Life Priority"/>
-          <input type="submit" value="add" />
+      <div className="app">
+        <h1 className="title">{this.state.title}</h1>
+        <form onSubmit={this.onSubmitPriority} className="form">
+          <input
+            type="text" value={this.state.input} onChange={this.onUpdateInput}
+            placeholder="Anything goes..." className="input" autoFocus required
+          />
+          <input type="submit" value="" className="submit" />
         </form>
-        <ul>
-          {this.getPrioritiesList()}
-        </ul>
+        <hr />
+        <ol className="priorities">
+          {priorities}
+        </ol>
       </div>
+    );
+  }
+}
+
+class Priority extends Component {
+  handleUpvoteClick = (e) => {
+    this.props.onUpvote(this.props.priority);
+  }
+
+  render() {
+    const id = this.props.priority.id;
+    const priority = this.props.priority.priority;
+    const votes = priority.votes;
+
+    return (
+      <li key={`li-${priority.id}`} className="priority">
+        <p className="priority__text">{priority.text}</p>
+        <button className="button" onClick={this.handleUpvoteClick}>
+          <img className="icon" src="/arrow.svg" alt="vote" />
+          <span className="button__text">{votes}</span>
+        </button>
+      </li>
     );
   }
 }
